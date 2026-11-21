@@ -1,0 +1,6 @@
+{
+  "name": "Sitara Cloth House",
+  "description": "Smart AI mobile billing, A-Z textile inventory, QR scanning, Digital Khata, expense & profit management software for Sitara Cloth House.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

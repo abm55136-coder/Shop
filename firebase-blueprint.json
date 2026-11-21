@@ -1,0 +1,181 @@
+{
+  "entities": {
+    "Shop": {
+      "title": "Shop",
+      "description": "Sitara Cloth House workspace profile owned by an authenticated merchant.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "shopName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 32 },
+        "email": { "type": "string", "maxLength": 120 },
+        "currency": { "type": "string", "maxLength": 12 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "shopName", "updatedAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Fabric SKU in the cloth house inventory catalogue.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "sku": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "name": { "type": "string", "minLength": 1, "maxLength": 140 },
+        "nameUrdu": { "type": "string", "maxLength": 140 },
+        "category": { "type": "string", "enum": ["Lawn", "Cotton", "Khaddar", "Linen", "Silk", "Chiffon", "Velvet", "Organza", "Other"] },
+        "unit": { "type": "string", "enum": ["Suit", "Meter", "Yard", "Piece"] },
+        "purchaseRate": { "type": "number" },
+        "wholesaleRate": { "type": "number" },
+        "retailRate": { "type": "number" },
+        "stock": { "type": "number" },
+        "minStock": { "type": "number" },
+        "supplierName": { "type": "string", "maxLength": 120 },
+        "qrCode": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "sku", "name", "category", "unit", "purchaseRate", "wholesaleRate", "retailRate", "stock", "minStock", "qrCode", "createdAt", "updatedAt"]
+    },
+    "Party": {
+      "title": "Party",
+      "description": "Customer or supplier account linked to Digital Khata.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "type": { "type": "string", "enum": ["customer", "supplier"] },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 32 },
+        "address": { "type": "string", "maxLength": 240 },
+        "balance": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "type", "name", "balance", "createdAt", "updatedAt"]
+    },
+    "Invoice": {
+      "title": "Invoice",
+      "description": "Completed sales, purchase, or return invoice with thermal receipt data.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "invoiceNumber": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "type": { "type": "string", "enum": ["sale", "purchase", "return"] },
+        "priceMode": { "type": "string", "enum": ["retail", "wholesale"] },
+        "partyId": { "type": "string", "maxLength": 128 },
+        "partyName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "salesmanId": { "type": "string", "maxLength": 128 },
+        "salesmanName": { "type": "string", "maxLength": 120 },
+        "subtotal": { "type": "number" },
+        "discount": { "type": "number" },
+        "previousBalance": { "type": "number" },
+        "netTotal": { "type": "number" },
+        "paidAmount": { "type": "number" },
+        "balanceDue": { "type": "number" },
+        "profit": { "type": "number" },
+        "status": { "type": "string", "enum": ["completed", "returned"] },
+        "items": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "invoiceNumber", "type", "priceMode", "partyName", "subtotal", "discount", "previousBalance", "netTotal", "paidAmount", "balanceDue", "profit", "status", "items", "createdAt"]
+    },
+    "KhataEntry": {
+      "title": "KhataEntry",
+      "description": "Digital Khata and Cash Book credit/debit ledger transaction.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "partyId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "partyName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "partyType": { "type": "string", "enum": ["customer", "supplier", "cashbook"] },
+        "entryType": { "type": "string", "enum": ["credit", "debit"] },
+        "amount": { "type": "number" },
+        "note": { "type": "string", "maxLength": 500 },
+        "detectedAmount": { "type": "number" },
+        "date": { "type": "string", "maxLength": 32 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "partyId", "partyName", "partyType", "entryType", "amount", "date", "createdAt"]
+    },
+    "Expense": {
+      "title": "Expense",
+      "description": "Categorized daily shop operating expense.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "category": { "type": "string", "enum": ["Goods & Transport", "Tea", "Cold Drinks", "Fast Food", "Electricity Bill 1", "Electricity Bill 2", "Electricity Bill 3", "Shop Rent & Maintenance", "Staff Salaries", "Other Daily Expenses"] },
+        "title": { "type": "string", "minLength": 1, "maxLength": 140 },
+        "amount": { "type": "number" },
+        "date": { "type": "string", "maxLength": 32 },
+        "note": { "type": "string", "maxLength": 400 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "category", "title", "amount", "date", "createdAt"]
+    },
+    "Salesman": {
+      "title": "Salesman",
+      "description": "Staff salesman profile with fixed salary, commission rate, advances, and deductions.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 32 },
+        "fixedSalary": { "type": "number" },
+        "commissionRate": { "type": "number" },
+        "advances": { "type": "number" },
+        "deductions": { "type": "number" },
+        "totalSales": { "type": "number" },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "name", "fixedSalary", "commissionRate", "advances", "deductions", "totalSales", "active", "createdAt", "updatedAt"]
+    },
+    "Backup": {
+      "title": "Backup",
+      "description": "Cloud backup snapshot checkpoint metadata.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "label": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "recordCount": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "label", "recordCount", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/shops/{shopId}": {
+      "schema": { "$ref": "#/entities/Shop" },
+      "description": "Root merchant workspace document owned by shopId == request.auth.uid."
+    },
+    "/shops/{shopId}/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Cloth product catalogue items belonging to a shop."
+    },
+    "/shops/{shopId}/parties/{partyId}": {
+      "schema": { "$ref": "#/entities/Party" },
+      "description": "Customers and suppliers belonging to a shop."
+    },
+    "/shops/{shopId}/invoices/{invoiceId}": {
+      "schema": { "$ref": "#/entities/Invoice" },
+      "description": "Sales, purchases, and return invoices belonging to a shop."
+    },
+    "/shops/{shopId}/khata/{entryId}": {
+      "schema": { "$ref": "#/entities/KhataEntry" },
+      "description": "Digital Khata and Cash Book entries belonging to a shop."
+    },
+    "/shops/{shopId}/expenses/{expenseId}": {
+      "schema": { "$ref": "#/entities/Expense" },
+      "description": "Shop operating expense entries belonging to a shop."
+    },
+    "/shops/{shopId}/salesmen/{salesmanId}": {
+      "schema": { "$ref": "#/entities/Salesman" },
+      "description": "Salesman compensation and performance records belonging to a shop."
+    },
+    "/shops/{shopId}/backups/{backupId}": {
+      "schema": { "$ref": "#/entities/Backup" },
+      "description": "Cloud backup checkpoint metadata belonging to a shop."
+    }
+  }
+}
